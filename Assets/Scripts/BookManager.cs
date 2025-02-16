@@ -7,6 +7,15 @@ public class BookManager : MonoBehaviour
     public GameObject bookCanvas;
     private bool isPaused;
 
+    public Image leftPage;
+    public Image rightPage;
+    public Sprite[] pages;
+    private int currentPage = 0;
+
+    public Button nextButton;
+    public Button prevButton;
+
+
 
     void Update()
     {
@@ -14,7 +23,9 @@ public class BookManager : MonoBehaviour
         {
             ToggleBook();
         }
-    } 
+
+        UpdatePages();
+    }
 
     void ToggleBook()
     {
@@ -44,6 +55,45 @@ public class BookManager : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+
+
+
+
+
+    void UpdatePages()
+    {
+        if (currentPage * 2 < pages.Length)
+            leftPage.sprite = pages[currentPage * 2];
+        else
+            leftPage.sprite = null;
+
+        if ((currentPage * 2) + 1 < pages.Length)
+            rightPage.sprite = pages[(currentPage * 2) + 1];
+        else
+            rightPage.sprite = null;
+
+        prevButton.interactable = currentPage > 0;
+        nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
+    }
+
+    public void NextPage()
+    {
+        if ((currentPage * 2) + 2 < pages.Length)
+        {
+            currentPage++;
+            UpdatePages();
+        }
+    }
+
+    public void PrevPage()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+            UpdatePages();
+        }
     }
 
 
