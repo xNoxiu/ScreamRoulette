@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,7 @@ public class BookManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleBook();
         }
@@ -51,7 +52,7 @@ public class BookManager : MonoBehaviour
         cameraLook.enabled = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        UpdatePages();
+        //UpdatePages();
     }
 
     void CloseBook()
@@ -68,23 +69,23 @@ public class BookManager : MonoBehaviour
 
 
 
-    void UpdatePages()
-    {
-        foreach (GameObject page in pages)
-        {
-            page.SetActive(false);
-        }
+    //void UpdatePages()
+    //{
+    //    foreach (GameObject page in pages)
+    //    {
+    //        page.SetActive(false);
+    //    }
 
-        if (currentPage * 2 < pages.Length)
-        {
-            pages[currentPage * 2].SetActive(true); // Lewa strona
-            if ((currentPage * 2) + 1 < pages.Length)
-                pages[(currentPage * 2) + 1].SetActive(true); // Prawa strona
-        }
+    //    if (currentPage * 2 < pages.Length)
+    //    {
+    //        pages[currentPage * 2].SetActive(true); // Lewa strona
+    //        if ((currentPage * 2) + 1 < pages.Length)
+    //            pages[(currentPage * 2) + 1].SetActive(true); // Prawa strona
+    //    }
 
-        prevButton.interactable = currentPage > 0;
-        nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
-    }
+    //    prevButton.interactable = currentPage > 0;
+    //    nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
+    //}
 
     public void NextPage()
     {
@@ -94,15 +95,19 @@ public class BookManager : MonoBehaviour
         GameObject rightPage = pages[(currentPage * 2) + 1];
         GameObject leftPage = pages[currentPage * 2];
 
-        rightPage.transform.DORotate(new Vector3(0, -180, 0), 1f, RotateMode.LocalAxisAdd)
+        rightPage.transform.SetSiblingIndex(pages.Length);
+
+        rightPage.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.LocalAxisAdd)
             .OnUpdate(() =>
             {
-                UpdatePages();
+                RearrangePages();
             })
             .OnComplete(() =>
             {
                 currentPage++;
-                UpdatePages();
+                //UpdatePages();
+                RearrangePages();
+                rightPage.transform.rotation = Quaternion.identity;
                 isAnimating = false;
             });
     }
@@ -112,20 +117,41 @@ public class BookManager : MonoBehaviour
         if (isAnimating || currentPage <= 0) return;
         isAnimating = true;
 
-        GameObject leftPage = pages[currentPage * 2];
-        GameObject rightPage = pages[(currentPage * 2) + 1];
+        GameObject leftPage = pages[(currentPage * 2) - 2];
+        GameObject rightPage = pages[(currentPage * 2) - 1];
 
-        leftPage.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.LocalAxisAdd)
+        leftPage.transform.SetSiblingIndex(pages.Length);
+
+        leftPage.transform.DORotate(new Vector3(0, -180, 0), 1f, RotateMode.LocalAxisAdd)
             .OnUpdate(() =>
             {
-                UpdatePages();
+                RearrangePages();
             })
             .OnComplete(() =>
             {
                 currentPage--;
-                UpdatePages();
+                RearrangePages();
+                //UpdatePages();
+                leftPage.transform.rotation = Quaternion.identity;
                 isAnimating = false;
             });
+    }
+
+    void RearrangePages()
+    {
+        for (int i = 0; i < pages.Length; i++)
+        {
+            pages[i].transform.SetSiblingIndex(i);
+        }
+
+        if (currentPage * 2 < pages.Length)
+        {
+            pages[currentPage * 2].transform.SetSiblingIndex(pages.Length); // Lewa strona na wierzch
+            if ((currentPage * 2) + 1 < pages.Length)
+            {
+                pages[(currentPage * 2) + 1].transform.SetSiblingIndex(pages.Length - 1); // Prawa strona tu¿ pod ni¹
+            }
+        }
     }
 
 
