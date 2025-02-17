@@ -117,12 +117,17 @@ public class BookManager : MonoBehaviour
         if (isAnimating || currentPage <= 0) return;
         isAnimating = true;
 
-        GameObject leftPage = pages[(currentPage * 2) - 2];
-        GameObject rightPage = pages[(currentPage * 2) - 1];
+        GameObject leftPage = pages[currentPage * 2];
+        GameObject rightPage = pages[(currentPage * 2) + 1];
 
         leftPage.transform.SetSiblingIndex(pages.Length);
 
         leftPage.transform.DORotate(new Vector3(0, -180, 0), 1f, RotateMode.LocalAxisAdd)
+            .OnStart(() =>
+            {
+                RearrangePages();
+                leftPage.transform.SetSiblingIndex(pages.Length);
+            })
             .OnUpdate(() =>
             {
                 RearrangePages();
@@ -146,12 +151,16 @@ public class BookManager : MonoBehaviour
 
         if (currentPage * 2 < pages.Length)
         {
-            pages[currentPage * 2].transform.SetSiblingIndex(pages.Length); // Lewa strona na wierzch
-            if ((currentPage * 2) + 1 < pages.Length)
-            {
-                pages[(currentPage * 2) + 1].transform.SetSiblingIndex(pages.Length - 1); // Prawa strona tu¿ pod ni¹
-            }
+            GameObject leftPage = pages[currentPage * 2];
+            leftPage.transform.SetSiblingIndex(pages.Length - 1);
         }
+
+        if ((currentPage * 2) + 1 < pages.Length)
+        {
+            GameObject rightPage = pages[(currentPage * 2) + 1];
+            rightPage.transform.SetSiblingIndex(pages.Length);
+        }
+
     }
 
 
