@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class BookManager : MonoBehaviour
 {
     public GameObject bookCanvas;
+    public PlayerMovement playerMovement;
+    public CameraLook cameraLook;
     private bool isPaused;
 
     public GameObject leftPage;
@@ -16,6 +18,8 @@ public class BookManager : MonoBehaviour
     public Button nextButton;
     public Button prevButton;
 
+    private bool isAnimating;
+
     
 
     void Update()
@@ -23,7 +27,6 @@ public class BookManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             ToggleBook();
-            UpdatePages();
         }
     }
 
@@ -44,15 +47,18 @@ public class BookManager : MonoBehaviour
     void OpenBook()
     {
         bookCanvas.SetActive(true);
-        //Time.timeScale = 0f;
+        playerMovement.enabled = false;
+        cameraLook.enabled = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        UpdatePages();
     }
 
     void CloseBook()
     {
         bookCanvas.SetActive(false);
-        //Time.timeScale = 1f;
+        playerMovement.enabled = true;
+        cameraLook.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -64,8 +70,6 @@ public class BookManager : MonoBehaviour
 
     void UpdatePages()
     {
-        Debug.Log("upupupup");
-
         foreach (GameObject page in pages)
         {
             page.SetActive(false);
@@ -73,61 +77,54 @@ public class BookManager : MonoBehaviour
 
         if (currentPage * 2 < pages.Length)
         {
-            Debug.Log("aaaa");
-            leftPage = pages[currentPage * 2];
-            leftPage.SetActive(true); 
-
+            pages[currentPage * 2].SetActive(true); // Lewa strona
             if ((currentPage * 2) + 1 < pages.Length)
-            {
-                rightPage = pages[(currentPage * 2) + 1];
-                rightPage.SetActive(true); 
-            }
-            else
-            {
-                rightPage.SetActive(false);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Brak strony do wyœwietlenia!");
+                pages[(currentPage * 2) + 1].SetActive(true); // Prawa strona
         }
 
-        //prevButton.interactable = currentPage > 0;
-        //nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
+        prevButton.interactable = currentPage > 0;
+        nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
     }
 
     public void NextPage()
     {
-        if (currentPage >= (pages.Length / 2) - 1) return;
+        if (isAnimating || currentPage >= (pages.Length / 2) - 1) return;
+        isAnimating = true;
 
-        Debug.Log("leeeeel");
-        rightPage.transform.DORotate(new Vector3(0, -180, 0), 2f, RotateMode.LocalAxisAdd)
+        GameObject rightPage = pages[(currentPage * 2) + 1];
+        GameObject leftPage = pages[currentPage * 2];
+
+        rightPage.transform.DORotate(new Vector3(0, -180, 0), 1f, RotateMode.LocalAxisAdd)
+            .OnUpdate(() =>
+            {
+                UpdatePages();
+            })
             .OnComplete(() =>
             {
-                Debug.Log("bbbbb");
-                currentPage++; 
+                currentPage++;
                 UpdatePages();
-                Debug.Log("cccc");
-
-
-                rightPage.transform.rotation = Quaternion.identity;
-                Debug.Log("Strona zmieniona na: " + currentPage);
+                isAnimating = false;
             });
     }
 
     public void PrevPage()
     {
-        if (currentPage <= 0) return; //?????????????
+        if (isAnimating || currentPage <= 0) return;
+        isAnimating = true;
 
-        Debug.Log("leeeeel");
-        leftPage.transform.DORotate(new Vector3(0, 180, 0), 2f, RotateMode.LocalAxisAdd)
+        GameObject leftPage = pages[currentPage * 2];
+        GameObject rightPage = pages[(currentPage * 2) + 1];
+
+        leftPage.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.LocalAxisAdd)
+            .OnUpdate(() =>
+            {
+                UpdatePages();
+            })
             .OnComplete(() =>
             {
                 currentPage--;
                 UpdatePages();
-
-                leftPage.transform.rotation = Quaternion.identity;
-                Debug.Log("Strona zmieniona na: " + currentPage);
+                isAnimating = false;
             });
     }
 
