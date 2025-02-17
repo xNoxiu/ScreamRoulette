@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,24 +8,23 @@ public class BookManager : MonoBehaviour
     public GameObject bookCanvas;
     private bool isPaused;
 
-    public Image leftPage;
-    public Image rightPage;
-    public Sprite[] pages;
-    private int currentPage = 0;
+    public GameObject leftPage;
+    public GameObject rightPage;
+    public GameObject[] pages;
+    public int currentPage = 0;
 
     public Button nextButton;
     public Button prevButton;
 
-
+    
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
             ToggleBook();
+            UpdatePages();
         }
-
-        UpdatePages();
     }
 
     void ToggleBook()
@@ -44,7 +44,7 @@ public class BookManager : MonoBehaviour
     void OpenBook()
     {
         bookCanvas.SetActive(true);
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -52,7 +52,7 @@ public class BookManager : MonoBehaviour
     void CloseBook()
     {
         bookCanvas.SetActive(false);
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -64,36 +64,71 @@ public class BookManager : MonoBehaviour
 
     void UpdatePages()
     {
+        Debug.Log("upupupup");
+
+        foreach (GameObject page in pages)
+        {
+            page.SetActive(false);
+        }
+
         if (currentPage * 2 < pages.Length)
-            leftPage.sprite = pages[currentPage * 2];
-        else
-            leftPage.sprite = null;
+        {
+            Debug.Log("aaaa");
+            leftPage = pages[currentPage * 2];
+            leftPage.SetActive(true); 
 
-        if ((currentPage * 2) + 1 < pages.Length)
-            rightPage.sprite = pages[(currentPage * 2) + 1];
+            if ((currentPage * 2) + 1 < pages.Length)
+            {
+                rightPage = pages[(currentPage * 2) + 1];
+                rightPage.SetActive(true); 
+            }
+            else
+            {
+                rightPage.SetActive(false);
+            }
+        }
         else
-            rightPage.sprite = null;
+        {
+            Debug.LogWarning("Brak strony do wyœwietlenia!");
+        }
 
-        prevButton.interactable = currentPage > 0;
-        nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
+        //prevButton.interactable = currentPage > 0;
+        //nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
     }
 
     public void NextPage()
     {
-        if ((currentPage * 2) + 2 < pages.Length)
-        {
-            currentPage++;
-            UpdatePages();
-        }
+        if (currentPage >= (pages.Length / 2) - 1) return;
+
+        Debug.Log("leeeeel");
+        rightPage.transform.DORotate(new Vector3(0, -180, 0), 2f, RotateMode.LocalAxisAdd)
+            .OnComplete(() =>
+            {
+                Debug.Log("bbbbb");
+                currentPage++; 
+                UpdatePages();
+                Debug.Log("cccc");
+
+
+                rightPage.transform.rotation = Quaternion.identity;
+                Debug.Log("Strona zmieniona na: " + currentPage);
+            });
     }
 
     public void PrevPage()
     {
-        if (currentPage > 0)
-        {
-            currentPage--;
-            UpdatePages();
-        }
+        if (currentPage <= 0) return; //?????????????
+
+        Debug.Log("leeeeel");
+        leftPage.transform.DORotate(new Vector3(0, 180, 0), 2f, RotateMode.LocalAxisAdd)
+            .OnComplete(() =>
+            {
+                currentPage--;
+                UpdatePages();
+
+                leftPage.transform.rotation = Quaternion.identity;
+                Debug.Log("Strona zmieniona na: " + currentPage);
+            });
     }
 
 
