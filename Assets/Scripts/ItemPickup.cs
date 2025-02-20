@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    public Transform holdPosition; // Miejsce trzymania przedmiotu przed kamer¹
-    public float pickupRange = 3f; // Maksymalna odleg³oœæ podnoszenia
-    public LayerMask pickupLayer; // Warstwa przedmiotów do podnoszenia
+    public Transform holdPosition; 
+    public float pickupRange = 2.5f; 
+    public LayerMask pickupLayer; 
 
-    private Rigidbody pickedUpObject; // Przechowywany przedmiot
+    private Rigidbody pickedUpObject;
 
     void Update()
     {
