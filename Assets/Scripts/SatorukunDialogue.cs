@@ -10,6 +10,7 @@ public class SatorukunDialogue : MonoBehaviour
     {
         if (other.CompareTag("Player") && !hasTalked)
         {
+            Debug.Log("test");
             hasTalked = true;
 
             List<string> sentences = new List<string>()
