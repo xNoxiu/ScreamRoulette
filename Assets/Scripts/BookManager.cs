@@ -11,13 +11,11 @@ public class BookManager : MonoBehaviour
     public CameraLook cameraLook;
     private bool isPaused;
 
-    public GameObject leftPage;
-    public GameObject rightPage;
     public GameObject[] pages;
     public int currentPage = 0;
 
-    public Button nextButton;
-    public Button prevButton;
+    public GameObject nextButton;
+    public GameObject prevButton;
 
     private bool isAnimating;
 
@@ -52,7 +50,7 @@ public class BookManager : MonoBehaviour
         cameraLook.enabled = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        //UpdatePages();
+        UpdatePages();
     }
 
     void CloseBook()
@@ -69,23 +67,23 @@ public class BookManager : MonoBehaviour
 
 
 
-    //void UpdatePages()
-    //{
-    //    foreach (GameObject page in pages)
-    //    {
-    //        page.SetActive(false);
-    //    }
+    void UpdatePages()
+    {
+        foreach (GameObject page in pages)
+        {
+            page.SetActive(false);
+        }
 
-    //    if (currentPage * 2 < pages.Length)
-    //    {
-    //        pages[currentPage * 2].SetActive(true); // Lewa strona
-    //        if ((currentPage * 2) + 1 < pages.Length)
-    //            pages[(currentPage * 2) + 1].SetActive(true); // Prawa strona
-    //    }
+        if (currentPage * 2 < pages.Length)
+        {
+            pages[currentPage * 2].SetActive(true); // Lewa strona
+            if ((currentPage * 2) + 1 < pages.Length)
+                pages[(currentPage * 2) + 1].SetActive(true); // Prawa strona
+        }
 
-    //    prevButton.interactable = currentPage > 0;
-    //    nextButton.interactable = (currentPage * 2) + 2 < pages.Length;
-    //}
+        prevButton.SetActive(currentPage > 0);
+        nextButton.SetActive((currentPage * 2) + 2 < pages.Length);
+    }
 
     public void NextPage()
     {
@@ -93,7 +91,11 @@ public class BookManager : MonoBehaviour
         isAnimating = true;
 
         GameObject rightPage = pages[(currentPage * 2) + 1];
-        GameObject leftPage = pages[currentPage * 2];
+
+        GameObject nextLeftPage = pages[(currentPage + 1) * 2];
+        GameObject nextRightPage = pages[((currentPage + 1) * 2) + 1];
+        nextLeftPage.SetActive(true);
+        nextRightPage.SetActive(true);
 
         rightPage.transform.SetSiblingIndex(pages.Length);
 
@@ -105,7 +107,7 @@ public class BookManager : MonoBehaviour
             .OnComplete(() =>
             {
                 currentPage++;
-                //UpdatePages();
+                UpdatePages();
                 RearrangePages();
                 rightPage.transform.rotation = Quaternion.identity;
                 isAnimating = false;
@@ -118,7 +120,14 @@ public class BookManager : MonoBehaviour
         isAnimating = true;
 
         GameObject leftPage = pages[currentPage * 2];
-        GameObject rightPage = pages[(currentPage * 2) + 1];
+
+        GameObject prevRightPage = pages[((currentPage - 1) * 2) + 1];
+        GameObject prevLeftPage = pages[(currentPage - 1) * 2];
+        prevLeftPage.SetActive(true);
+        prevRightPage.SetActive(true);
+
+        prevLeftPage.transform.SetSiblingIndex(pages.Length - 1);
+        prevRightPage.transform.SetSiblingIndex(pages.Length);
 
         leftPage.transform.SetSiblingIndex(pages.Length);
 
@@ -126,17 +135,16 @@ public class BookManager : MonoBehaviour
             .OnStart(() =>
             {
                 RearrangePages();
-                leftPage.transform.SetSiblingIndex(pages.Length);
             })
             .OnUpdate(() =>
             {
-                RearrangePages();
+                leftPage.transform.SetSiblingIndex(pages.Length);
             })
             .OnComplete(() =>
             {
                 currentPage--;
                 RearrangePages();
-                //UpdatePages();
+                UpdatePages();
                 leftPage.transform.rotation = Quaternion.identity;
                 isAnimating = false;
             });
