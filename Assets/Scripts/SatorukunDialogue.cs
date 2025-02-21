@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SatorukunDialogue : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class SatorukunDialogue : MonoBehaviour
     {
         if (other.CompareTag("Player") && !hasTalked)
         {
-            Debug.Log("test");
             hasTalked = true;
 
             List<string> sentences = new List<string>()
@@ -21,11 +21,22 @@ public class SatorukunDialogue : MonoBehaviour
                 "How do you call a japanese fox?"
             };
 
+            List<string> correctAnswerSentences = new List<string>()
+            {
+                "Hm... Correct. I guess I need to let you go now..."
+            };
+
+            List<string> wrongAnswerSentences = new List<string>()
+            {
+                "Wrong! You die!",
+                "Your journey ends here..."
+            };
+
             string correctAnswer = "kitsune";
 
             dialogueManager.StartDialogue(sentences, correctAnswer,
-                () => { Debug.Log("Hm... Correct. I guess I need to let you go now..."); },
-                () => { Debug.Log("Wrong! You die!"); }
+                () => dialogueManager.StartFollowUpDialogue(correctAnswerSentences, () => SceneManager.LoadSceneAsync(3)),
+                () => dialogueManager.StartFollowUpDialogue(wrongAnswerSentences, () => SceneManager.LoadScene("GameOver"))
             );
         }
     }
