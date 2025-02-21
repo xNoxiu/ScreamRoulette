@@ -6,6 +6,11 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
+    public PlayerMovement playerMovement;
+    public CameraLook cameraLook;
+    public AudioSource phone;
+    public AudioSource talk;
+
     public TextMeshProUGUI dialogueText;
     public GameObject dialoguePanel;
     public Button option1;
@@ -37,6 +42,11 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(List<string> dialogueLines, System.Action option1Action, System.Action option2Action)
     {
+        playerMovement.enabled = false;
+        cameraLook.enabled = false;
+        phone.Stop();
+        talk.Play();
+
         sentences.Clear();
         dialoguePanel.SetActive(true);
 
@@ -81,6 +91,7 @@ public class DialogueManager : MonoBehaviour
     
     void ShowOptions()
     {
+        talk.Stop();
         option1.gameObject.SetActive(true);
         option2.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
@@ -109,6 +120,7 @@ public class DialogueManager : MonoBehaviour
     public void StartFollowUpDialogue(List<string> followUpLines, System.Action onEndAction)
     {
         Debug.Log("Rozpoczynam dodatkowy dialog...");
+        talk.Play();
 
         sentences.Clear();
         foreach (string line in followUpLines)
@@ -153,10 +165,14 @@ public class DialogueManager : MonoBehaviour
     {
         yield return new WaitForSeconds(4f);
 
+        talk.Stop();
         dialoguePanel.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
         Debug.Log("Wywo³ujê onDialogueEnd...");
         onDialogueEnd?.Invoke();
+
+        playerMovement.enabled = true;
+        cameraLook.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 }

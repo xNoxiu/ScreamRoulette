@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MoveDoor : MonoBehaviour
 {
+    [SerializeField] private AudioSource doorAudio;
+
     private Vector3 startPos; 
     private Vector3 targetPos; 
     private bool isOpen = false; 
@@ -31,6 +33,7 @@ public class MoveDoor : MonoBehaviour
     {
         float time = 0;
         Vector3 start = transform.position;
+        doorAudio.Play();
 
         while (time < 1)
         {

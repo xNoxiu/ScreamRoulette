@@ -46,7 +46,7 @@ public class SatorukunDialogue : MonoBehaviour
                 () => dialogueManager.StartFollowUpDialogue(option2sentences, () =>
                 {
                     Debug.Log("Próba za³adowania sceny GameOver...");
-                    SceneManager.LoadScene(4);
+                    SceneManager.LoadScene(6);
                 })
             );
         }
