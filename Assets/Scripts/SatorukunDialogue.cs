@@ -28,15 +28,22 @@ public class SatorukunDialogue : MonoBehaviour
 
             List<string> wrongAnswerSentences = new List<string>()
             {
-                "Wrong! You die!",
-                "Your journey ends here..."
+                "Wrong! You die!"
             };
 
             string correctAnswer = "kitsune";
 
             dialogueManager.StartDialogue(sentences, correctAnswer,
-                () => dialogueManager.StartFollowUpDialogue(correctAnswerSentences, () => SceneManager.LoadSceneAsync(3)),
-                () => dialogueManager.StartFollowUpDialogue(wrongAnswerSentences, () => SceneManager.LoadScene("GameOver"))
+                () => dialogueManager.StartFollowUpDialogue(correctAnswerSentences, () => 
+                {
+                    Debug.Log("Próba za³adowania sceny 3...");
+                    SceneManager.LoadScene(3);
+                }),
+                () => dialogueManager.StartFollowUpDialogue(wrongAnswerSentences, () =>
+                {
+                    Debug.Log("Próba za³adowania sceny GameOver...");
+                    SceneManager.LoadScene("GameOver");
+                })
             );
         }
     }

@@ -118,6 +118,7 @@ public class DialogueManager : MonoBehaviour
             sentences.Enqueue(line);
         }
         onDialogueEnd = onEndAction;
+        Debug.Log("Liczba zdañ w follow-up dialogu: " + sentences.Count);
         ShowNextFollowUpSentence();
     }
 
@@ -125,11 +126,14 @@ public class DialogueManager : MonoBehaviour
     {
         if (isTyping) return;
 
-        if (sentences.Count == 0)
+        Debug.Log("Liczba zdañ w kolejce: " + sentences.Count);
+
+        if (sentences.Count == 1)
         {
             Debug.Log("Koniec follow-up dialogu, zmieniam scenê...");
             dialoguePanel.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
+            Debug.Log("Wywo³ujê onDialogueEnd...");
             onDialogueEnd?.Invoke();
             return;
         }
