@@ -8,13 +8,13 @@ public class DialogueManager : MonoBehaviour
 {
     public TextMeshProUGUI dialogueText;
     public GameObject dialoguePanel;
-    public TMP_InputField answerInput;
-    public Button submitButton;
+    public Button option1;
+    public Button option2;
 
     private Queue<string> sentences;
     private string correctAnswer;
-    private System.Action onCorrectAnswer;
-    private System.Action onWrongAnswer;
+    private System.Action onOption1;
+    private System.Action onOption2;
     private System.Action onDialogueEnd;
 
     private bool isTyping = false;
@@ -22,9 +22,8 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
-        submitButton.onClick.AddListener(CheckAnswer);
-        answerInput.gameObject.SetActive(false);
-        submitButton.gameObject.SetActive(false);
+        option1.gameObject.SetActive(false);
+        option2.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);
     }
 
@@ -36,7 +35,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue(List<string> dialogueLines, string expectedAnswer, System.Action correctAction, System.Action wrongAction)
+    public void StartDialogue(List<string> dialogueLines, System.Action option1Action, System.Action option2Action)
     {
         sentences.Clear();
         dialoguePanel.SetActive(true);
@@ -46,9 +45,8 @@ public class DialogueManager : MonoBehaviour
             sentences.Enqueue(line);
         }
 
-        correctAnswer = expectedAnswer.ToLower();
-        onCorrectAnswer = correctAction;
-        onWrongAnswer = wrongAction;
+        onOption1 = option1Action;
+        onOption2 = option2Action;
 
         ShowNextSentence();
     }
@@ -59,7 +57,7 @@ public class DialogueManager : MonoBehaviour
 
         if (sentences.Count == 0)
         {
-            ShowAnswerInput();
+            ShowOptions();
             return;
         }
 
@@ -80,31 +78,31 @@ public class DialogueManager : MonoBehaviour
 
         isTyping = false;
     }
-
-    void ShowAnswerInput()
+    
+    void ShowOptions()
     {
-        answerInput.gameObject.SetActive(true);
-        submitButton.gameObject.SetActive(true);
-        answerInput.ActivateInputField();
+        option1.gameObject.SetActive(true);
+        option2.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void CheckAnswer()
+    public void OnOption1Selected()
     {
-        string playerAnswer = answerInput.text.ToLower().Trim();
+        onOption1?.Invoke();
 
-        if (playerAnswer == correctAnswer)
-        {
-            onCorrectAnswer?.Invoke();
-            answerInput.gameObject.SetActive(false);
-            submitButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            onWrongAnswer?.Invoke();
-        }
+        option1.gameObject.SetActive(false);
+        option2.gameObject.SetActive(false);
 
-        answerInput.text = "";
+        Cursor.lockState = CursorLockMode.Locked;
+    } 
+
+    public void OnOption2Selected()
+    {
+        onOption2?.Invoke();
+
+        option1.gameObject.SetActive(false);
+        option2.gameObject.SetActive(false);
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -128,7 +126,7 @@ public class DialogueManager : MonoBehaviour
 
         Debug.Log("Liczba zdañ w kolejce: " + sentences.Count);
 
-        if (sentences.Count == 1)
+        if (sentences.Count == 0)
         {
             Debug.Log("Koniec follow-up dialogu, zmieniam scenê...");
             dialoguePanel.SetActive(false);
@@ -142,6 +140,23 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("Wyœwietlam follow-up zdanie: " + sentence);
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
+
+        if (sentences.Count == 0)
+        {
+            Debug.Log("Koniec follow-up dialogu, zmieniam scenê...");
+            StartCoroutine(EndDialogueWithDelay());
+        }
+
+    }
+
+    private IEnumerator EndDialogueWithDelay()
+    {
+        yield return new WaitForSeconds(4f);
+
+        dialoguePanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Debug.Log("Wywo³ujê onDialogueEnd...");
+        onDialogueEnd?.Invoke();
     }
 
 }
