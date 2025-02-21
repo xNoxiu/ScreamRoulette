@@ -87,6 +87,8 @@ public class BookManager : MonoBehaviour
 
     public void NextPage()
     {
+        Debug.Log("nextpage");
+
         if (isAnimating || currentPage >= (pages.Length / 2) - 1) return;
         isAnimating = true;
 
@@ -116,6 +118,8 @@ public class BookManager : MonoBehaviour
 
     public void PrevPage()
     {
+        Debug.Log("prevpage");
+
         if (isAnimating || currentPage <= 0) return;
         isAnimating = true;
 
