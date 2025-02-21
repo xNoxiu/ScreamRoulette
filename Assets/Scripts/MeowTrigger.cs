@@ -10,7 +10,6 @@ public class MeowTrigger : MonoBehaviour
             if (audioSource != null && !audioSource.isPlaying)
             {
                 audioSource.Play(); 
-                Debug.Log("MEOW! DŸwiêk KITTEEEEEYYYYYY odtworzony!");
             }
         }
     }
