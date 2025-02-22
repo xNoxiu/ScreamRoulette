@@ -37,6 +37,17 @@ public class DialogueManager : MonoBehaviour
         if (dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Q))
         {
             ShowNextSentence();
+        } 
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Cursor.visible = false;
         }
     }
 

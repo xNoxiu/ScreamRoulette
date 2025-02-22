@@ -60,7 +60,6 @@ public class BookManager : MonoBehaviour
         bookCanvas.SetActive(false);
         playerMovement.enabled = true;
         cameraLook.enabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
