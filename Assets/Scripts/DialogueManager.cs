@@ -92,6 +92,7 @@ public class DialogueManager : MonoBehaviour
     void ShowOptions()
     {
         talk.Stop();
+        Cursor.lockState = CursorLockMode.None;
         option1.gameObject.SetActive(true);
         option2.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
@@ -142,7 +143,6 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.Log("Koniec follow-up dialogu, zmieniam scenê...");
             dialoguePanel.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
             Debug.Log("Wywo³ujê onDialogueEnd...");
             onDialogueEnd?.Invoke();
             return;
