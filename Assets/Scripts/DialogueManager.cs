@@ -152,6 +152,7 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("Wyœwietlam follow-up zdanie: " + sentence);
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
+        sentences.Clear();
 
         if (sentences.Count == 0)
         {
@@ -172,7 +173,8 @@ public class DialogueManager : MonoBehaviour
 
         playerMovement.enabled = true;
         cameraLook.enabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
     }
+
 
 }

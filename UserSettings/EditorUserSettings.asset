@@ -9,34 +9,34 @@ EditorUserSettings:
       value: 18134705175a055722080a3115371d4a0d55006876786860616b0471b8b07a68ffab74f9ee2a3a30300cea1a11320d0beb1a0c25f7060f494b4cc80018eb09361fc211cb1f862d19c51d19dcc413d6ade0d8ddfcddf9f4d9d29195fcfde6ebeae6f0a9c9afa6f8c5b89ff7a1aacececac4eba4d7c9d28bda
       flags: 0
     RecentlyUsedSceneGuid-0:
-      value: 515304540607500d5d5f0a2148775a444f1649722a2c23672b2c1960b1e66d6d
-      flags: 0
-    RecentlyUsedSceneGuid-1:
       value: 55060d03570d0d5f545c097548750c4444154f73787c72647a7b4f6be4b7643b
       flags: 0
-    RecentlyUsedSceneGuid-2:
+    RecentlyUsedSceneGuid-1:
       value: 0507045751560a595c575a7a117a5c441216497e7e7d73672f7a4966b0b4353e
       flags: 0
-    RecentlyUsedSceneGuid-3:
+    RecentlyUsedSceneGuid-2:
       value: 5a08575f5207595a0f5d59741173094444164f7d7d2a23317c7a4465bbe1646d
       flags: 0
+    RecentlyUsedSceneGuid-3:
+      value: 50080c5606510c5f0b5b0f76457b0c444e4e4e7f7c702066752b4965bbb7663d
+      flags: 0
     RecentlyUsedSceneGuid-4:
-      value: 57020253060459095c0b0921157a5a444e4e1d2f282973322e7e4c35e6e1613a
-      flags: 0
-    RecentlyUsedSceneGuid-5:
-      value: 5a530d5e510d5f5f540a0f7746700e44464e497f787976612e2f1861b7b6616d
-      flags: 0
-    RecentlyUsedSceneGuid-6:
       value: 57550d515c505e580e0f597044270744424e417d7b2e713675784c35e6b8616a
       flags: 0
+    RecentlyUsedSceneGuid-5:
+      value: 57020253060459095c0b0921157a5a444e4e1d2f282973322e7e4c35e6e1613a
+      flags: 0
+    RecentlyUsedSceneGuid-6:
+      value: 0150060501565a0e5d085877157b0e44474e41287e2c7534782c1e30b7e6673d
+      flags: 0
     RecentlyUsedSceneGuid-7:
-      value: 50080c5606510c5f0b5b0f76457b0c444e4e4e7f7c702066752b4965bbb7663d
+      value: 50040d5757510c0b5a5f5f241172594441161b2e742d7f357b701e66b7e13061
       flags: 0
     RecentlyUsedSceneGuid-8:
       value: 51535757060c0f0d0f0b552647700e4412164e7a7c2b7261797a1c6ae0b6376e
       flags: 0
     RecentlyUsedSceneGuid-9:
-      value: 0150060501565a0e5d085877157b0e44474e41287e2c7534782c1e30b7e6673d
+      value: 5a530d5e510d5f5f540a0f7746700e44464e497f787976612e2f1861b7b6616d
       flags: 0
     lightmappingBakingProfile:
       value: 51
