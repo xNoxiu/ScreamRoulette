@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class BookManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource turnpage;
+
     public GameObject bookCanvas;
     public PlayerMovement playerMovement;
     public CameraLook cameraLook;
@@ -87,6 +89,8 @@ public class BookManager : MonoBehaviour
 
     public void NextPage()
     {
+        turnpage.Play();
+
         if (isAnimating || currentPage >= (pages.Length / 2) - 1) return;
         isAnimating = true;
 
@@ -116,6 +120,8 @@ public class BookManager : MonoBehaviour
 
     public void PrevPage()
     {
+        turnpage.Play();
+
         if (isAnimating || currentPage <= 0) return;
         isAnimating = true;
 
